@@ -109,4 +109,14 @@ button {
   button:active {
     background-color: #0f0f0f69;
   }
+  #key-list {
+    margin-top: 1em;
+    padding-left: 1.2em;
+    list-style-type: disc;
+  }
+
+  #key-list li {
+    margin-bottom: 0.3em;
+    font-family: sans-serif;
+  }
 }
