@@ -15,11 +15,23 @@ async function loadEntries() {
   renderList(entries);
 }
 
+async function deleteEntry(index) {
+  const updatedEntries = await invoke("delete_entry", { index });
+  renderList(updatedEntries);
+}
+
 function renderList(entries) {
   keyListEl.innerHTML = "";
-  entries.forEach((entry) => {
+  entries.forEach((entry, index) => {
     const li = document.createElement("li");
     li.textContent = entry;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.style.marginLeft = "1em";
+    deleteBtn.onclick = () => deleteEntry(index);
+
+    li.appendChild(deleteBtn);
     keyListEl.appendChild(li);
   });
 }

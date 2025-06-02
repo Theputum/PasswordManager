@@ -115,8 +115,18 @@ button {
     list-style-type: disc;
   }
 
+  #key-list button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+}
+
   #key-list li {
-    margin-bottom: 0.3em;
-    font-family: sans-serif;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 }

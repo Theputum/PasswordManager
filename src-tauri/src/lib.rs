@@ -30,6 +30,23 @@ fn key(key: String, app: AppHandle, state: State<'_, AppState>) -> Result<Vec<St
 }
 
 #[tauri::command]
+fn delete_entry(index: usize, app: AppHandle, state: State<'_, AppState>) -> Result<Vec<String>, String> {
+    let mut list = state.0.lock().unwrap();
+
+    if index < list.entries.len() {
+        list.entries.remove(index);
+
+        if let Err(e) = save_to_file(&app, &list.entries) {
+            return Err(format!("Failed to save after deletion: {}", e));
+        }
+
+        Ok(list.entries.clone())
+    } else {
+        Err(format!("Index {} is out of bounds", index))
+    }
+}
+
+#[tauri::command]
 fn load_entries(app: AppHandle, state: State<'_, AppState>) -> Result<Vec<String>, String> {
     let entries = load_from_file(&app).unwrap_or_default();
     let mut list = state.0.lock().unwrap();
@@ -61,6 +78,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .manage(AppState(Mutex::new(EntryList::new())))
         .invoke_handler(tauri::generate_handler![key, load_entries])
+        .invoke_handler(tauri::generate_handler![key, load_entries, delete_entry])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
