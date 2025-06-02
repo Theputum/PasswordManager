@@ -6,16 +6,22 @@ let keyListEl;
 async function key() {
   const entries = await invoke("key", { key: keyInputEl.value });
 
-  // Clear the list and re-render it with all entries
+  renderList(entries);
+  keyInputEl.value = "";
+}
+
+async function loadEntries() {
+  const entries = await invoke("load_entries");
+  renderList(entries);
+}
+
+function renderList(entries) {
   keyListEl.innerHTML = "";
   entries.forEach((entry) => {
     const li = document.createElement("li");
     li.textContent = entry;
     keyListEl.appendChild(li);
   });
-
-  // Optionally clear input after submission
-  keyInputEl.value = "";
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -25,4 +31,5 @@ window.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     key();
   });
+  loadEntries();
 });
